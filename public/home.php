@@ -135,5 +135,153 @@ if(!empty($_SESSION['usuario'])) {
 
 <section id="campanhas">
     <?php foreach ($doacoes as $doacao): ?>
-        
+
+        <div data-nome="<?= strtolower($doacao['nome_doacao']) ?>" data-administrador="<?= strtolower($doacao['administrador']) ?>" data-descricao="<?= strtolower($doacao['descricao']) ?>">
+        </div>
+
+        <img src="<?= !empty($doacao['foto']) ? $doacao['foto'] : ''?>" 
+        alt="Administrador"
+        class="foto-administrador">
+
+        <span>
+            <?= $doacao['administrador'] ?>
+        </span>
+
+        <h3>
+            <?= $doacao['nome_doacao'] ?>
+        </h3>
+
+        <p>
+            <?= mb_strimwidth($doacao['descricao'], 0, 120, '...') ?>
+        </p>
+
+        <p>
+            <?= $doacao['localizacao'] ?>
+        </p>
+
+        <span>
+            Prazo
+        </span>
+
+        <strong>
+            <?= $doacao['prazo'] ?> dias
+        </strong>
+
+        <span>
+            Preço
+        </span>
+
+        <strong>
+            R$ <?= number_format($doacao['preco_aarrecadar'], 2, ',', '.') ?>
+        </strong>
+
+        <?php if (
+            isset($_SESSION['usuario']) &&
+            $_SESSION['usuario']['tipo'] === 'administrador'
+        ) : ?>
+
+            <button
+                onclick="abrirModalDoacao(
+                    '<?= $doacao['nome_doacao'] ?>',
+                    '<?= $doacao['administrador'] ?>'
+                    '<?= $doacao['descricao'] ?>',
+                    '<?= $doacao['prazo'] ?>',
+                    '<?= $doacao['preco_aarrecadar'] ?>',
+                    '<?= $doacao['localizacao'] ?>',
+                    '<?= !empty($doacao['foto']) ? $doacao['foto'] : '' ?>'
+                )">
+                Ver doação
+            </button>
+
+        <?php else: ?>
+            <button
+                onclick="abrirModalDoacao(
+                    '<?= $doacao['nome_doacao'] ?>',
+                    '<?= $doacao['administrador'] ?>'
+                    '<?= $doacao['descricao'] ?>',
+                    '<?= $doacao['prazo'] ?>',
+                    '<?= $doacao['preco_aarrecadar'] ?>',
+                    '<?= $doacao['localizacao'] ?>',
+                    '<?= !empty($doacao['foto']) ? $doacao['foto'] : '' ?>'
+                )">
+                Ver doação
+            </button>
+
+        <a href="doacao.php?id=<?= $doacao['id'] ?>">
+            <button>
+                Doar
+            </button>
+        </a>
+
+        <?php endif; ?>
+
+    <?php endforeach; ?>
 </section>
+
+<footer>
+    <p>
+        2024 © ONG Apoio Social. Todos os direitos reservados.
+    </p>
+</footer>
+
+<div id="modalDoacao">
+    <span>
+        onclick="fecharModalDoacao()">
+        &times;    
+    </span>
+
+    <img
+        scr=""
+        id="modalFotoDoacao"
+        class="modal-foto">
+
+    <span id="modal-administrador"></span>
+
+    <h2 id="modal-titulo"></h2>
+
+     <div class="modal-info">
+
+                <p id="modal-descricao"></p>
+
+                <div class="modal-detalhes">
+
+                    <div class="detalhe-box">
+
+                        <span>
+                            Prazo
+                        </span>
+
+                        <strong id="modal-prazo"></strong>
+
+                    </div>
+
+                    <div class="detalhe-box">
+
+                        <span>
+                            Preço à arrecadar
+                        </span>
+
+                        <strong id="modal-preco_aarrecadar"></strong>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-localizacao"  id="modal-localizacao">
+
+                    <p class="localizacao">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <?= $doacao['localizacao'] ?>
+                </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
+<script src="js/home.js"></script>
