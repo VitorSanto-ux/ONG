@@ -1,6 +1,6 @@
 <?php
 
-require_once "C:/Turma2/xampp/htdocs/ONG/backend/app/models/ParticipacaoModel.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/models/ParticipacaoModel.php";
 
 class ParticipacaoController{
     private $participacaoModel;

@@ -2,6 +2,9 @@
 
 session_start();
 
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/db/database.php";
+
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/UsuarioController.php";
 
 if(!isset($_SESSION['cadastro'])){
 

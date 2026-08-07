@@ -2,7 +2,14 @@
 
 session_start();
 
-$doadorController = new DoadorController($pdo);
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/db/database.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/UsuarioController.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/DoacaoController.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/services/PerfilService.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/Controller.php";
+
+
+$participacaoController = new ParticipacaoController($pdo);
 
 if( !isset($_SESSION['usuario']) ){
 
@@ -13,23 +20,23 @@ exit;
 $usuarioId = $_SESSION['usuario']['id'];
 
 $usuarioController = new UsuarioController($pdo);
-$campanhasController = new CampanhaController($pdo);
+$doacaoController = new DoacaoController($pdo);
 $perfilService = new PerfilService($usuarioController);
 
 $usuario = $usuarioController->buscarUsuario($usuarioId);
 
-$campanhas = $usuarioController->listarCampanhasDoPerfil(
+$doacao = $usuarioController->listarDoacaoDoPerfil(
     $usuarioId,
     $usuario['tipo'],
-    $campanhasController,
-    $doadorController
+    $doacaoController,
+    $participacaoController
 );
 
 $mensagem = "";
 
 if ($usuario['tipo'] === 'administrador') {
 
-    $campanhas = $campanhasController->listarPorAdministrador($usuarioId);
+    $doacoes = $doacaoController->listarPorAdministrador($usuarioId);
 }
 
 if (isset($_POST['alterar_senha'])) {
@@ -179,8 +186,8 @@ if (isset($_POST['alterar_foto'])) {
                 <?php if ($usuario['tipo'] === 'administrador'): ?>
 
                     <a
-                        href="Administrador/campanhas.php"
-                        class="btn-campanhas">
+                        href="Administrador/doacoes/minhas-campanhas.php"
+                        class="btn-doacoes">
 
                         Gerenciar Campanhas
 
@@ -189,10 +196,10 @@ if (isset($_POST['alterar_foto'])) {
                     <?php else: ?>
 
                     <a
-                        href="Voluntario/campanhas.php"
-                        class="btn-campanhas">
+                        href="../public/Voluntário/participar-doacao.php"
+                        class="btn-doacoes">
 
-                        Minhas Campanhas
+                        Minhas Doações
                     </a>
 
                 <?php endif; ?>

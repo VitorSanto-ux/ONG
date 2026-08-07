@@ -2,6 +2,12 @@
 
 session_start();
 
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/db/database.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/DoacaoController.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/UsuarioController.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/ParticipacaoController.php";
+
+
 if (!isset($_SESSION['usuario'])) {
     header("Locatio: login.php");
     exit;
@@ -9,7 +15,7 @@ if (!isset($_SESSION['usuario'])) {
 
 $doacaoController = new DoacaoController($pdo);
 $usuarioController = new UsuarioController($pdo);
-$participarController = new ParticiparController($pdo);
+$participacaoController = new ParticipacaoController($pdo);
 
 $usuario = $usuarioController->buscarUsuario($_SESSION['usuario']['id']);
 
@@ -31,7 +37,7 @@ if (isset($_POST['participar'])) {
     $doadorId = $_SESSION['usuario']['id'];
     $texto = trim($_POST['mensagem']);
 
-    $participarController->participar(
+    $participacaoController->participar(
         $doadorId,
         $id,
         $texto

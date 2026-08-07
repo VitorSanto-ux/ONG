@@ -2,74 +2,98 @@
 
 session_start();
 
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/db/database.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/DoacaoController.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/CampanhaController.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/ParticipacaoController.php";
+
+
 $campanhaController = new CampanhaController($pdo);
 $campanhas = $campanhaController->listar();
 
 $doacaoController = new DoacaoController($pdo);
 
 $q = $_GET['q'] ?? '';
-$campanhaId = $_GET['campaha_id'] ?? null;
+$campanhaId = $_GET['campanha_id'] ?? null;
 
 $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
 
 $notificacoes = 0;
 
-if(!empty($_SESSION['usuario'])) {
-    $doadorController = new DoadorController($pdo);
+if (!empty($_SESSION['usuario'])) {
+    $participacaoController = new ParticipacaoController($pdo);
 
-    if($_SESSION['usuario']['tipo'] == 'administrador') {
-        $notificacoes = $doadorController->contarPendentesAdministrador($_SESSION['usuario']['id']);
-    }else {
-        $notificacoes = $doadorController->contarPendentesVoluntario($_SESSION['usuario']['id']);
+    if ($_SESSION['usuario']['tipo'] == 'administrador') {
+        $notificacoes = $participacaoController->contarPendentesAdministrador($_SESSION['usuario']['id']);
+    } else {
+        $notificacoes = $participacaoController->contarPendentesDoador($_SESSION['usuario']['id']);
     }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Campanhas</title>
 </head>
+
 <body>
     <header>
-        <span>Apoio Social</span>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+            </div>
+            <div class="logo-text">
+                <span class="logo-name">Apoio Social</span>
+            </div>
+        </div>
 
         <nav>
             <?php
 
             $linkNotificacoes = "#";
 
-            if(!empty($_SESSION['usuario'])) {
+            if (!empty($_SESSION['usuario'])) {
 
-                    if($_SESSION['usuario']['tipo'] === 'administrador') {
-                        $linkNotificacoes = "Administrador/notificacoes.php";
-                    }else {
-                        $linkNotificacoes = "Voluntario/notificacoes.php";
-                    }
+                if ($_SESSION['usuario']['tipo'] === 'administrador') {
+                    $linkNotificacoes = "Administrador/notificacoes.php";
+                } else {
+                    $linkNotificacoes = "Voluntario/notificacoes.php";
+                }
             }
             ?>
 
-            <form method="GET" action="home.php">
+            <form class="search-box" method="GET" action="home.php">
                 <input type="text" id="searchInput" name="q" placeholder="Pesquisar campanhas" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
 
                 <button type="submit">
+                    <i class="fa-solid fa-magnifying-glass" style="color: #111827;"></i>
                 </button>
 
-                <a href="<?= $linkNotificacao ?>">
-                    <?php if ($notificacoes > 0): ?>
+                <?php if (!empty($_SESSION['usuario'])): ?>
 
-                        <span>
-                            <?= $notificacoes ?>
-                        </span>
-                    <?php endif; ?>
 
-                </a>
+                    <a href="<?= $linkNotificacao ?>" class="icon-user notificacao-icon">
+                        <i class="fa-solid fa-bell"></i>
+
+                        <?php if ($notificacoes > 0): ?>
+
+                            <span class="badge-notificacao">
+                                <?= $notificacoes ?>
+                            </span>
+                        <?php endif; ?>
+
+                    </a>
+                <?php endif; ?>
             </form>
 
-            <?php if(!empty($_SESSION['usuario'])): ?>
-                <a href="perfil.php"></a>
+            <?php if (!empty($_SESSION['usuario'])): ?>
+                <a href="perfil.php" class="icon-user">
+                    <i class="fa-solid fa-user"></i>
+                </a>
 
             <?php else: ?>
                 <a href="login.php">Entrar</a>
@@ -78,168 +102,221 @@ if(!empty($_SESSION['usuario'])) {
         </nav>
     </header>
 
-   <section>
-    <h1>
-        Bem-vindo, <?= htmlspecialchars($_SESSION['usuario']['tipo'] ?? 'Visitante') ?>
-    </h1>
+    <section class="welcome-section">
 
-    <p>
-        <?php if (!empty($_SESSION['usuario']) && $_SESSION['usuario']['tipo'] === 'administrador'): ?>
-            Gerencie campanhas, voluntários e doações para transformar vidas através da solidariedade.
-        <?php else: ?>
-            Explore campanhas, faça doações e participe de ações voluntárias para contribuir com a nossa missão de transformar vidas através da solidariedade.
-        <?php endif; ?>
-    </p>
-    
-    <?php if (!empty($_SESSION['usuario']) && $_SESSION['usuario']['tipo'] === 'administrador'): ?>
-        <h3>
-            Você é um administrador.
-        </h3>
+        <div class="welcome-text">
 
-        <p>
-            Publique campanhas, gerencie doações e voluntários, e acompanhe o impacto positivo que estamos gerando na sociedade.
-        </p>
+            <h1>
+                Bem-vindo, <?= htmlspecialchars($_SESSION['usuario']['tipo'] ?? 'Visitante') ?>
+            </h1>
 
-        <a href="administrador/campanhas/minhas-campanhas.php">Gerenciar Campanhas</a>
-    <?php else: ?>
-        <h3>
-            Você é um voluntário.
-        </h3>
-
-        <p>
-            Participe de ações voluntárias, faça doações e ajude a construir um mundo mais justo e solidário.
-        </p>
-
-        <a href="#campanhas">
-            Explorar Campanhas
-        </a>
-    <?php endif; ?>
-</section>
-
-<section id="campanhasDropdown">
-    <button onclick="toggleCampanhas()">
-        Explorar Campanhas
-    </button>
-
-    <a href="home.php">
-        todas as campanhas
-    </a>
-
-    <?php foreach ($campanhas as $cat): ?>
-
-        <a href="home.php?campaha=<?= $cat['id'] ?>">
-            <?= htmlspecialchars($cat['nome']) ?>
-        </a>
-    <?php endforeach; ?>
-</section>
-
-<section id="campanhas">
-    <?php foreach ($doacoes as $doacao): ?>
-
-        <div data-nome="<?= strtolower($doacao['nome_doacao']) ?>" data-administrador="<?= strtolower($doacao['administrador']) ?>" data-descricao="<?= strtolower($doacao['descricao']) ?>">
+            <p>
+                <?php if (!empty($_SESSION['usuario']) && $_SESSION['usuario']['tipo'] === 'administrador'): ?>
+                    Gerencie campanhas, voluntários e doações para transformar vidas através da solidariedade.
+                <?php else: ?>
+                    Explore campanhas, faça doações e participe de ações voluntárias para contribuir com a nossa missão de transformar vidas através da solidariedade.
+                <?php endif; ?>
+            </p>
         </div>
 
-        <img src="<?= !empty($doacao['foto']) ? $doacao['foto'] : ''?>" 
-        alt="Administrador"
-        class="foto-administrador">
+        <div class="recommendation-card">
+            <?php if (!empty($_SESSION['usuario']) && $_SESSION['usuario']['tipo'] === 'administrador'): ?>
+                <h3>
+                    Você é um administrador.
+                </h3>
 
-        <span>
-            <?= $doacao['administrador'] ?>
-        </span>
+                <p>
+                    Publique campanhas, gerencie doações e voluntários, e acompanhe o impacto positivo que estamos gerando na sociedade.
+                </p>
 
-        <h3>
-            <?= $doacao['nome_doacao'] ?>
-        </h3>
+                <a href="administrador/doacoes/minhas-campanhas.php" class="btn-recomendacao">Gerenciar Campanhas</a>
+            <?php else: ?>
+                <h3>
+                    <i class="fa-solid fa-briefcase"></i>
+                    Você é um voluntário.
+                </h3>
 
+                <p>
+                    Participe de ações voluntárias, faça doações e ajude a construir um mundo mais justo e solidário.
+                </p>
+
+                <a href="#doacoes" class="btn-recomendacao">
+                    Explorar Campanhas
+                </a>
+            <?php endif; ?>
+        </div>
+    </section>
+
+    <section class="cmpanhas-menu">
+        <div class="campanhas-topo">
+            <button class="btn-campanhas" onclick="toggleCampanhas()">
+                Explorar Campanhas
+                <i class="fa-solid fa-chevron-down" id="icon-main"></i>
+            </button>
+        </div>
+
+        <div class="campanhas-dropdown" id="campanhasDropdown">
+
+            <a href="home.php" class="campanha-item">
+                todas as campanhas
+            </a>
+
+            <?php foreach ($campanhas as $cam): ?>
+
+                <a href="home.php?campaha=<?= $cam['id'] ?>"
+                    class="categoria-item">
+                    <?= htmlspecialchars($cam['nome']) ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </section>
+
+    <section class="doacoes campanhas-menu" id="doacoes">
+
+        <div class="doacoes-grid">
+            <?php foreach ($doacoes as $doacao): ?>
+
+                <div class="card-doacao" data-nome="<?= strtolower($doacao['nome_doacao']) ?>" data-administrador="<?= strtolower($doacao['administrador']) ?>" data-descricao="<?= strtolower($doacao['descricao']) ?>">
+
+                    <div class="top-card">
+
+                        <div class="perfil-area">
+
+                            <img src="<?= !empty($doacao['foto']) ? $doacao['foto'] : '' ?>"
+                                alt="Administrador"
+                                class="foto-administrador">
+
+                            <div class="perfil-info">
+
+                                <span class="nome-administrador">
+                                    <?= $doacao['administrador'] ?>
+                                </span>
+
+                                <h3>
+                                    <?= $doacao['nome_doacao'] ?>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-content">
+
+                        <p class="descricao">
+                            <?= mb_strimwidth($doacao['descricao'], 0, 120, '...') ?>
+                        </p>
+
+                        <p class="localizacao">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <?= $doacao['localizacao'] ?>
+                        </p>
+
+                        <div class="info-doacao">
+
+                            <div class="info-box">
+
+                                <span class="label">
+                                    Prazo
+                                </span>
+
+                                <strong>
+                                    <?= $doacao['prazo'] ?> dias
+                                </strong>
+
+                            </div>
+
+                            <div class="info-box">
+                                <span class="label">
+                                    Preço à arrecadar
+                                </span>
+
+                                <strong>
+                                    R$ <?= number_format($doacao['preco_aarrecadar'], 2, ',', '.') ?>
+                                </strong>
+                            </div>
+                        </div>
+
+                        <?php if (
+                            isset($_SESSION['usuario']) &&
+                            $_SESSION['usuario']['tipo'] === 'administrador'
+                        ) : ?>
+
+                            <button
+                                class="btn-ver-doacao"
+                                onclick="abrirModalDoacao(
+                                        '<?= $doacao['nome_doacao'] ?>',
+                                        '<?= $doacao['administrador'] ?>'
+                                        '<?= $doacao['descricao'] ?>',
+                                        '<?= $doacao['prazo'] ?>',
+                                        '<?= $doacao['preco_aarrecadar'] ?>',
+                                        '<?= $doacao['localizacao'] ?>',
+                                        '<?= !empty($doacao['foto']) ? $doacao['foto'] : '' ?>'
+                                        )">
+                                Ver doação
+                            </button>
+
+                        <?php else: ?>
+
+                            <div class="botoes">
+                                <button
+                                    class="btn-ver-doacao"
+                                    onclick="abrirModalDoacao(
+                                        '<?= $doacao['nome_doacao'] ?>',
+                                        '<?= $doacao['administrador'] ?>'
+                                        '<?= $doacao['descricao'] ?>',
+                                        '<?= $doacao['prazo'] ?>',
+                                        '<?= $doacao['preco_aarrecadar'] ?>',
+                                        '<?= $doacao['localizacao'] ?>',
+                                        '<?= !empty($doacao['foto']) ? $doacao['foto'] : '' ?>'
+                                        )">
+                                    Ver doação
+                                </button>
+
+                                <a href="doacao.php?id=<?= $doacao['id'] ?>"
+                                    class="btn-participar">
+                                    Doar
+                                </a>
+                            </div>
+
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+            <?php endforeach; ?>
+        </div>
+    </section>
+
+    <footer>
         <p>
-            <?= mb_strimwidth($doacao['descricao'], 0, 120, '...') ?>
+            2024 © ONG Apoio Social. Todos os direitos reservados.
         </p>
+    </footer>
 
-        <p>
-            <?= $doacao['localizacao'] ?>
-        </p>
+    <div class="modal-doacao" id="modalDoacao">
 
-        <span>
-            Prazo
-        </span>
+        <div class="modal-box">
 
-        <strong>
-            <?= $doacao['prazo'] ?> dias
-        </strong>
+            <span
+                class="fechar-modal"
+                onclick="fecharModalDoacao()">
+                &times;
+            </span>
 
-        <span>
-            Preço
-        </span>
+            <div class="modal-topo">
 
-        <strong>
-            R$ <?= number_format($doacao['preco_aarrecadar'], 2, ',', '.') ?>
-        </strong>
 
-        <?php if (
-            isset($_SESSION['usuario']) &&
-            $_SESSION['usuario']['tipo'] === 'administrador'
-        ) : ?>
+                <img
+                    scr=""
+                    id="modalFotoDoacao"
+                    class="modal-foto">
 
-            <button
-                onclick="abrirModalDoacao(
-                    '<?= $doacao['nome_doacao'] ?>',
-                    '<?= $doacao['administrador'] ?>'
-                    '<?= $doacao['descricao'] ?>',
-                    '<?= $doacao['prazo'] ?>',
-                    '<?= $doacao['preco_aarrecadar'] ?>',
-                    '<?= $doacao['localizacao'] ?>',
-                    '<?= !empty($doacao['foto']) ? $doacao['foto'] : '' ?>'
-                )">
-                Ver doação
-            </button>
+                <div>
+                    <span class="modal-administrador" id="modal-administrador"></span>
 
-        <?php else: ?>
-            <button
-                onclick="abrirModalDoacao(
-                    '<?= $doacao['nome_doacao'] ?>',
-                    '<?= $doacao['administrador'] ?>'
-                    '<?= $doacao['descricao'] ?>',
-                    '<?= $doacao['prazo'] ?>',
-                    '<?= $doacao['preco_aarrecadar'] ?>',
-                    '<?= $doacao['localizacao'] ?>',
-                    '<?= !empty($doacao['foto']) ? $doacao['foto'] : '' ?>'
-                )">
-                Ver doação
-            </button>
+                    <h2 id="modal-titulo"></h2>
+                </div>
+            </div>
 
-        <a href="doacao.php?id=<?= $doacao['id'] ?>">
-            <button>
-                Doar
-            </button>
-        </a>
-
-        <?php endif; ?>
-
-    <?php endforeach; ?>
-</section>
-
-<footer>
-    <p>
-        2024 © ONG Apoio Social. Todos os direitos reservados.
-    </p>
-</footer>
-
-<div id="modalDoacao">
-    <span>
-        onclick="fecharModalDoacao()">
-        &times;    
-    </span>
-
-    <img
-        scr=""
-        id="modalFotoDoacao"
-        class="modal-foto">
-
-    <span id="modal-administrador"></span>
-
-    <h2 id="modal-titulo"></h2>
-
-     <div class="modal-info">
+            <div class="modal-info">
 
                 <p id="modal-descricao"></p>
 
@@ -267,12 +344,12 @@ if(!empty($_SESSION['usuario'])) {
 
                 </div>
 
-                <div class="modal-localizacao"  id="modal-localizacao">
+                <div class="modal-localizacao" id="modal-localizacao">
 
                     <p class="localizacao">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <?= $doacao['localizacao'] ?>
-                </p>
+                        <i class="fa-solid fa-location-dot"></i>
+                        <?= $doacao['localizacao'] ?>
+                    </p>
                 </div>
 
             </div>
@@ -280,6 +357,8 @@ if(!empty($_SESSION['usuario'])) {
         </div>
 
     </div>
+
+
 
 </body>
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once "C:/Turma2/xampp/htdocs/ONG/backend/app/models/CampanhaModel.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/models/CampanhaModel.php";
 
 class CampanhaController {
     private $campanhaModel;

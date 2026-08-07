@@ -1,13 +1,13 @@
 <?php
 
-require_once "C:/Turma2/xampp/htdocs/ONG/backend/app/controllers/DoacaoController.php";
-require_once "C:/Turma2/xampp/htdocs/ONG/backend/app/database/database.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/DoacaoController.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/db/database.php";
 
-$DoacaoController = new DoacaoController($pdo);
+$doacaoController = new DoacaoController($pdo);
 
 if(isset($_GET['id'])){
     $id = $_GET['id'];
-    $DoacaoController->deletar($id);
+    $doacaoController->deletar($id);
     header('Location: ../../index.php');
 } else {
     header('Location: ../../../index.php');

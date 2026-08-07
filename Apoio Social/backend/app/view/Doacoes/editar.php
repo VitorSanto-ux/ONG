@@ -1,9 +1,9 @@
 <?php
 
-require_once "C:/Turma2/xampp/htdocs/ONG/backend/app/database/database.php";
-require_once "C:/Turma2/xampp/htdocs/ONG/backend/app/controllers/DoacaoController.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/db/database.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/DoacaoController.php";
 
-$DoacaoController = new DoacaoController($pdo);
+$doacaoController = new DoacaoController($pdo);
 
 if(isset($_GET['id'])){
     $id = $_GET['id'];

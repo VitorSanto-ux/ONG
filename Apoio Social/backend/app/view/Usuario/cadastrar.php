@@ -32,8 +32,8 @@
 
 <?php
 
-require_once "C:/Turma2/xampp/htdocs/ONG/backend/app/database/database.php";
-require_once "C:/Turma2/xampp/htdocs/ONG/backend/app/controllers/UsuarioController.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/db/database.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/UsuarioController.php";
 
 $UsuarioController = new UsuarioController($pdo);
 
