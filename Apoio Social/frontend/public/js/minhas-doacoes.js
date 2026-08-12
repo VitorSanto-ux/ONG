@@ -20,8 +20,6 @@ function abrirModal(
 
     document.getElementById('edit-localizacao').value = localizacao;
 
-    document.getElementById('edit-campanha').value = campanha;
-
     document.getElementById('modalEditar').style.display = 'flex';
 }
 

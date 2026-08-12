@@ -2,7 +2,7 @@
 
 require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/models/DoacaoModel.php";
 
-class DoacaoModel
+class DoacaoController
 {
     private $doacaoModel;
 
@@ -67,8 +67,7 @@ class DoacaoModel
         $nome_Doacao,
         $descricao,
         $preco,
-        $prazo_aarrecadar,
-        $campanhaId
+        $prazo_aarrecadar
 
     ) {
         return $this->doacaoModel->editar(
@@ -76,8 +75,7 @@ class DoacaoModel
             $nome_Doacao,
             $descricao,
             $preco,
-            $prazo_aarrecadar,
-            $campanhaId
+            $prazo_aarrecadar
         );
     }
 

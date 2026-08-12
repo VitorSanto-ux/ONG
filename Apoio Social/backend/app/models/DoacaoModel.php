@@ -1,17 +1,20 @@
 <?php
 
-class DoacaoModel {
+class DoacaoModel
+{
 
     private $pdo;
 
-    public function __construct($pdo){
+    public function __construct($pdo)
+    {
         $this->pdo = $pdo;
     }
 
-    
-    public function listar(){
 
-    $sql = "SELECT 
+    public function listar()
+    {
+
+        $sql = "SELECT 
                 d.*,
                 u.nome AS administrador,
                 u.foto,
@@ -21,17 +24,18 @@ class DoacaoModel {
             INNER JOIN campanhas c ON c.id = d.campanha_id
             ORDER BY s.id DESC";
 
-    return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-    public function listarPorAdministrador($usuarioId){
+    public function listarPorAdministrador($usuarioId)
+    {
 
         $sql = "SELECT 
                     d.*,
                     c.nome AS campanha
-                FROM doacoes d
-                INNER JOIN campanhas c ON c.id = d.campanha_id
-                WHERE d.usuario_id = ?
+                FROM doacao d
+                INNER JOIN campanha c ON c.id_campanha = d.id_campanha
+                WHERE d.id_doador = ?
                 ORDER BY d.id DESC";
 
         $stmt = $this->pdo->prepare($sql);
@@ -42,37 +46,38 @@ class DoacaoModel {
     }
 
     public function buscarFiltrados($q = null, $campanhaId = null)
-{
-    $sql = "SELECT 
+    {
+        $sql = "SELECT 
                 d.*,
                 u.nome AS administrador,
                 u.foto,
                 c.nome AS campanha_nome
-            FROM doacoes d
-            JOIN usuarios u ON u.id = d.usuario_id
-            JOIN campanhas c ON c.id = d.campanha_id
+            FROM doacao d
+            JOIN usuarios u ON u.id = d.id_doador
+            JOIN campanha c ON c.id_campanha = d.id_campanha
             WHERE 1=1";
-    $params = [];
+        $params = [];
 
-    if (!empty($q)) {
-        $sql .= " AND (d.nome_doacao LIKE ? OR d.descricao LIKE ?)";
-        $params[] = "%$q%";
-        $params[] = "%$q%";
+        if (!empty($q)) {
+            $sql .= " AND (d.nome_doacao LIKE ? OR d.descricao LIKE ?)";
+            $params[] = "%$q%";
+            $params[] = "%$q%";
+        }
+
+        if (!empty($campanhaId)) {
+            $sql .= " AND d.campanha_id = ?";
+            $params[] = $campanhaId;
+        }
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    if (!empty($campanhaId)) {
-        $sql .= " AND d.campanha_id = ?";
-        $params[] = $campanhaId;
-    }
 
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute($params);
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-    
-    public function listarPorCampanha($campanhaId){
+    public function listarPorCampanha($campanhaId)
+    {
 
         $sql = "SELECT 
                     d.*,
@@ -90,52 +95,29 @@ class DoacaoModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
- 
-   public function buscarPorId($id) {
 
-    $sql = "SELECT
+    public function buscarPorId($id)
+    {
+
+        $sql = "SELECT
     doacoes.*,
     usuarios.nome AS administrador,
     usuarios.foto,
     usuarios.email
-FROM doacoes
-INNER JOIN usuarios
-ON doacoes.usuario_id = usuarios.id
-WHERE doacoes.id = ?";
+    FROM doacoes
+    INNER JOIN usuarios
+    ON doacoes.usuario_id = usuarios.id
+    WHERE doacoes.id = ?";
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-    $stmt->execute([$id]);
+        $stmt->execute([$id]);
 
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
-    
+
     public function criar(
-    $usuarioId,
-    $campanhaId,
-    $nomeDoacao,
-    $descricao,
-    $preco,
-    $prazo_aarrecadar,
-    $localizacao
-){
-
-    $sql = "INSERT INTO doacoes 
-    (
-        usuario_id,
-        campanha_id,
-        nome_doacao,
-        descricao,
-        preco,
-        prazo_aarrecadar,
-        localizacao
-    )
-    VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-    $stmt = $this->pdo->prepare($sql);
-
-    return $stmt->execute([
         $usuarioId,
         $campanhaId,
         $nomeDoacao,
@@ -143,41 +125,82 @@ WHERE doacoes.id = ?";
         $preco,
         $prazo_aarrecadar,
         $localizacao
-    ]);
-}
+    ) {
 
-    
+        $sql = "INSERT INTO doacao 
+    (
+        id_doador,
+        id_campanha,
+        descricao,
+        preco,
+        prazo_aarrecadar,
+        localizacao
+    )
+    VALUES (?, ?, ?, ?, ?, ?)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+         $stmt->execute([
+            $usuarioId,
+            $campanhaId,
+            $descricao,
+            $preco,
+            $prazo_aarrecadar,
+            $localizacao
+        ]);
+
+        $sql2 = "INSERT INTO campanha 
+    (
+        id_campanha,
+        nome,
+        descricao,
+        data_inicio,
+        data_fim,
+        meta_valor
+        
+        )
+    VALUES (?, ?, ?, NOW(),NOW(), ?)";
+
+        $stmt = $this->pdo->prepare($sql2);
+
+        return $stmt->execute([
+            $campanhaId,
+            $nomeDoacao,
+            $descricao,
+            $preco
+        ]);
+
+        
+    }
+
+
     public function editar(
-    $id,
-    $nome_doacao,
-    $descricao,
-    $preco,
-    $prazo_aarrecadar,
-    $campanha_id
-){
+        $id,
+        $nome_doacao,
+        $descricao,
+        $preco,
+        $prazo_aarrecadar
+    ) {
 
-    $sql = "UPDATE doacoes
+        $sql = "UPDATE doacao
             SET 
-                campanha_id = ?,
-                nome_doacao = ?,
                 descricao = ?,
                 preco = ?,
                 prazo_aarrecadar = ?
             WHERE id = ?";
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-    return $stmt->execute([
-        $campanha_id,
-        $nome_doacao,
-        $descricao,
-        $preco,
-        $prazo_aarrecadar,
-        $id
-    ]);
-}
+        return $stmt->execute([
+            $descricao,
+            $preco,
+            $prazo_aarrecadar,
+            $id
+        ]);
+    }
 
-    public function deletar($id){
+    public function deletar($id)
+    {
 
         $sql = "DELETE FROM doacoes WHERE id = ?";
 
@@ -185,6 +208,8 @@ WHERE doacoes.id = ?";
 
         return $stmt->execute([$id]);
     }
+    
+    
 }
 
 ?>

@@ -8,14 +8,14 @@ require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/Us
 
 if(!isset($_SESSION['cadastro'])){
 
-    header("Lcation: cadastro.php");
+    header("Location: cadastro.php");
     exit;
 }
 
 $tipo = $_POST['tipo'] ?? '';
 
 if(
-    $tipo != 'volutario' &&
+    $tipo != 'voluntario' &&
     $tipo != 'administrador'
 ){
 
@@ -52,10 +52,11 @@ $_SESSION['usuario'] = [
     'id' => $usuario['id'],
     'nome' => $usuario['nome'],
     'email' => $usuario['email'],
-    'tipo' => $usuario['tipo']
+    'tipo' => $tipo
 
 ];
-
+// var_dump($_SESSION['cadastro']);
+//     die();
 unset($_SESSION['cadastro']);
 
 header("Location: home.php");

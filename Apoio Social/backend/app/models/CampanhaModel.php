@@ -9,14 +9,14 @@ class CampanhaModel {
     }
 
     public function listar() {
-        $sql = "SELECT * FROM campanhas ORDER BY nome ASC";
+        $sql = "SELECT * FROM campanha ORDER BY nome ASC";
         return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
     public function buscarPorId($id) {
 
-        $sql = "SELECT id, nome FROM campanhas WHERE id = ?";
+        $sql = "SELECT id, nome FROM campanha WHERE id = ?";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$id]);

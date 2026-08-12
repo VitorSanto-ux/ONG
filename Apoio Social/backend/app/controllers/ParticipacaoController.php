@@ -34,7 +34,7 @@ class ParticipacaoController{
     }
 
     public function contarPendentesAdministrador($administradorId){
-        return $this->participacaoModel->contarPendetesAdministrador($administradorId);
+        return $this->participacaoModel->contarPendentesAdministrador($administradorId);
     }
 
     public function contarPendentesDoador($doadorId){

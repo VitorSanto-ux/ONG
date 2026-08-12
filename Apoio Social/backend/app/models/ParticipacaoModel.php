@@ -113,10 +113,10 @@ public function contarPendentesAdministrador($administradorId)
     $sql = "SELECT COUNT(*) as total
             FROM participacoes p
 
-            INNER JOIN doacoes d
-            ON d.servico_id = d.id
+            INNER JOIN doacao d
+            ON d.id_doador = p.doador_id
 
-            WHERE d.usuario_id = ?
+            WHERE d.id_doador = ?
             AND p.status = 'pendente'";
 
     $stmt = $this->pdo->prepare($sql);
@@ -124,6 +124,25 @@ public function contarPendentesAdministrador($administradorId)
     $stmt->execute([$administradorId]);
 
     return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+}
+
+public function contarPendentesDoador($doadorId){
+
+    $sql = "SELECT COUNT(*) as total
+            FROM participacoes p
+            
+            INNER JOIN doacao d
+            ON d.id_doador = p.doador_id
+            
+            WHERE d.id_doador = ?
+            AND p.status = 'pendente'";
+
+    $stmt = $this->pdo->prepare($sql);
+
+    $stmt->execute([$doadorId]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+                
 }
 
 public function contarNotificacoesDoador($doadorId)

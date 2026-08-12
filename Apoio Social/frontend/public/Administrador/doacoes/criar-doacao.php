@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $mensagem = "Doação criada com sucesso!";
 
-        header("Location: minhas-doacoes.php");
+        header('location: minhas-campanhas.php ');
         exit;
     }else {
 
@@ -223,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
 
 
-                <button>
+                <button
                     type="submit"
                     class="btn-submit"
                 >

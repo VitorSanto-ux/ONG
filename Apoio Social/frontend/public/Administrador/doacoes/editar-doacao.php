@@ -19,15 +19,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     $prazo = $_POST['prazo'];
 
-    $campanha_id = $_POST['campanha_id'];
 
     $doacaoController->editar(
         $id,
         $nome_doacao,
         $descricao,
         $precoaarrecadar,
-        $prazo,
-        $campanha_id
+        $prazo
     );
 
     header("Location: minhas-campanhas.php");

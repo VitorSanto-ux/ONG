@@ -10,6 +10,9 @@ require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/Pa
 
 $campanhaController = new CampanhaController($pdo);
 $campanhas = $campanhaController->listar();
+// var_dump($campanhas);
+// die();
+
 
 $doacaoController = new DoacaoController($pdo);
 
@@ -21,6 +24,7 @@ $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
 $notificacoes = 0;
 
 if (!empty($_SESSION['usuario'])) {
+
     $participacaoController = new ParticipacaoController($pdo);
 
     if ($_SESSION['usuario']['tipo'] == 'administrador') {
@@ -163,8 +167,9 @@ if (!empty($_SESSION['usuario'])) {
 
             <?php foreach ($campanhas as $cam): ?>
 
-                <a href="home.php?campaha=<?= $cam['id'] ?>"
+                <a href="home.php?campanha=<?= $cam['id_campanha'] ?>"
                     class="categoria-item">
+                    <br>
                     <?= htmlspecialchars($cam['nome']) ?>
                 </a>
             <?php endforeach; ?>
@@ -277,6 +282,14 @@ if (!empty($_SESSION['usuario'])) {
                                 </a>
                             </div>
 
+                            <div class="modal-localizacao" id="modal-localizacao">
+
+                                <p class="localizacao">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <?= $doacao['localizacao'] ?>
+                                </p>
+                            </div>
+
                         <?php endif; ?>
                     </div>
                 </div>
@@ -342,14 +355,6 @@ if (!empty($_SESSION['usuario'])) {
 
                     </div>
 
-                </div>
-
-                <div class="modal-localizacao" id="modal-localizacao">
-
-                    <p class="localizacao">
-                        <i class="fa-solid fa-location-dot"></i>
-                        <?= $doacao['localizacao'] ?>
-                    </p>
                 </div>
 
             </div>

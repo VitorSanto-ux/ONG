@@ -31,6 +31,12 @@ $doacoes = $doacaoController->listarPorAdministrador($administradorId);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minhas Doações</title>
+
+    <style>
+        #modalEditar {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -63,10 +69,10 @@ $doacoes = $doacaoController->listarPorAdministrador($administradorId);
             </div>
         <?php else: ?>
             <div class="doacoes-grid">
-                <?php foreach ($doacoes as $doacao): ?>
+                <?php  foreach ($doacoes as $doacao): ?>
                     <div class="card-doacao">
                         <h3>
-                            <?= $doacao['nome_doacao'] ?>
+                            <?= $doacao['campanha'] ?>
                         </h3>
 
                         <P class="descricao">
@@ -76,12 +82,12 @@ $doacoes = $doacaoController->listarPorAdministrador($administradorId);
                         <div class="info">
                             <span>
                                 <i class="fa-regular fa-clock"></i>
-                                <?= $doacao['prazo'] ?> dia(s)
+                                <?= $doacao['prazo_aarrecadar'] ?> dia(s)
                             </span>
                         </div>
 
                         <div class="preco">
-                            R$ <?= number_format($doacao['preco_aarrecadar'], 2, ',', '.') ?>
+                            R$ <?= number_format($doacao['preco'], 2, ',', '.') ?>
                         </div>
                     </div>
 
@@ -89,13 +95,13 @@ $doacoes = $doacaoController->listarPorAdministrador($administradorId);
                         <button
                             class="btn-editar"
                             onclick="abrirModal(
-                                '<?= $doacao['id'] ?>',
-                                '<?= $doacao['nome_doacao'] ?>',
-                                '<?= $doacao['descricao'] ?>',
-                                '<?= $doacao['preco_aarrecadar'] ?>',
-                                '<?= $doacao['prazo'] ?>',
-                                '<?= $doacao['localizacao'] ?>',
-                                '<?= $doacao['campanha_id'] ?>',
+                                '<?= $doacao['id']; ?>',
+                                '<?= $doacao['campanha']; ?>',
+                                '<?= $doacao['descricao']; ?>',
+                                '<?= $doacao['preco']; ?>',
+                                '<?= $doacao['prazo_aarrecadar']; ?>',
+                                '<?= $doacao['localizacao']; ?>',
+                                '<?= $doacao['id_campanha']; ?>'
                             )">
                             Editar
                         </button>
@@ -140,7 +146,7 @@ $doacoes = $doacaoController->listarPorAdministrador($administradorId);
                     <input
                         type="text"
                         name="nome_doacao"
-                        id="edit_id"
+                        id="edit-nome"
                         required>
                 </div>
 
@@ -167,7 +173,7 @@ $doacoes = $doacaoController->listarPorAdministrador($administradorId);
                         type="number"
                         step="0.01"
                         name="preco_aarrecadar"
-                        id="edit-preco_aarrecadar"
+                        id="edit-preco"
                         required>
                 </div>
 
@@ -179,100 +185,10 @@ $doacoes = $doacaoController->listarPorAdministrador($administradorId);
                     <input
                         type="number"
                         name="prazo"
-                        id="edit-prazo"
+                        id="edit-prazo_arrecadar"
                         required>
                 </div>
 
-                <div class="form-group">
-                    <label>
-                        Campanhas
-                    </label>
-
-                    <select
-                        name="campanha_id"
-                        id="edit-campanha"
-                        required>
-                        <option value="1">
-                            Campanha do Agasalho
-                        </option>
-
-                        <option value="2">
-                            Natal Solidário
-                        </option>
-
-                        <option value="3">
-                            Mochila do Futuro
-                        </option>
-
-                        <option value="4">
-                            Prato Cheio
-                        </option>
-
-                        <option value="5">
-                            Doe um Sorriso
-                        </option>
-
-                        <option value="6">
-                            Mãos que Ajudam
-                        </option>
-
-                        <option value="7">
-                            Esperança Verde
-                        </option>
-
-                        <option value="8">
-                            Saúde para Todos
-                        </option>
-
-                        <option value="9">
-                            Conectando Vidas
-                        </option>
-
-                        <option value="10">
-                            Emprego e Dignidade
-                        </option>
-
-                        <option value="11">
-                            Doe Sangue, Salve Vidas
-                        </option>
-
-                        <option value="12">
-                            Cesta do Bem
-                        </option>
-
-                        <option value="13">
-                            Amigo Idoso
-                        </option>
-
-                        <option value="14">
-                            Volta às Aulas Solidária
-                        </option>
-
-                        <option value="15">
-                            Páscoa Solidária
-                        </option>
-
-                        <option value="16">
-                            Inverno Sem Frio
-                        </option>
-
-                        <option value="17">
-                            Outubro Rosa e Novembro Azul
-                        </option>
-
-                        <option value="18">
-                            Doe Tempo
-                        </option>
-
-                        <option value="19">
-                            Dia das Crianças Feliz
-                        </option>
-
-                        <option value="20">
-                            Juntos Contra a Fome
-                        </option>
-                    </select>
-                </div>
 
                 <div class="form-group">
                     <label>
@@ -294,7 +210,7 @@ $doacoes = $doacaoController->listarPorAdministrador($administradorId);
             </form>
         </div>
     </div>
+    <script src="../../js/minhas-doacoes.js"></script>
 </body>
 
 </html>
-<script src="../../js/minhas-doacoes.js"></script>
