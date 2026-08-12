@@ -185,9 +185,6 @@ WHERE doacoes.id = ?";
 
         return $stmt->execute([$id]);
     }
-
-    
-
 }
 
 ?>
