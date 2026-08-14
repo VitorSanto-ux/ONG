@@ -1,0 +1,288 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Poppins", sans-serif;
+    background:#11172a;
+    color:#fff;
+    line-height:1.6;
+
+    padding:40px 8%;
+}
+
+
+
+.topo{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:40px;
+}
+
+.topo h1{
+    font-size:38px;
+    font-weight:700;
+    color:#fff;
+}
+
+
+
+.btn-back{
+    width:48px;
+    height:48px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:14px;
+
+    background:#fff;
+    color:#11172a;
+
+    text-decoration:none;
+
+    transition:.3s;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+}
+
+.btn-back:hover{
+    transform:translateY(-3px);
+    background:#e2e8f0;
+}
+
+
+.notificacoes-grid{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+}
+
+
+
+.card-notificacao{
+    background:#fff;
+
+    border-radius:24px;
+
+    padding:28px;
+
+    border:1px solid rgba(0,0,0,.06);
+
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+
+    transition:.3s;
+
+    color:#11172a;
+}
+
+.card-notificacao:hover{
+    transform:translateY(-5px);
+    box-shadow:0 18px 40px rgba(0,0,0,.18);
+}
+
+
+
+.card-topo{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:20px;
+
+    margin-bottom:20px;
+}
+
+
+
+.cliente{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.icon-cliente{
+    width:68px;
+    height:68px;
+
+    border-radius:50%;
+
+    overflow:hidden;
+
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex-shrink:0;
+
+    padding:3px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.35),
+            rgba(255,255,255,.08)
+        );
+
+    box-shadow:
+        0 10px 30px rgba(255,255,255,.10),
+        0 0 20px rgba(255,255,255,.06);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border .3s ease;
+}
+
+
+
+.foto-cliente{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    position:relative;
+    z-index:2;
+
+    border:2px solid rgba(17,24,39,.9);
+
+    display:block;
+}
+
+.info-cliente h3{
+    font-size:22px;
+    margin-bottom:4px;
+    color:#11172a;
+}
+
+.info-cliente span{
+    color:#475569;
+    font-size:14px;
+}
+
+
+.status{
+    padding:8px 15px;
+    border-radius:999px;
+
+    font-size:12px;
+    font-weight:700;
+
+    text-transform:uppercase;
+}
+
+.status.pendente{
+    background:#facc15;
+    color:#111827;
+}
+
+.status.aceito{
+    background:#22c55e;
+    color:#fff;
+}
+
+.status.recusado{
+    background:#ef4444;
+    color:#fff;
+}
+
+
+.mensagem{
+    color:#334155;
+
+    margin-bottom:25px;
+
+    line-height:1.8;
+}
+
+
+
+.acoes{
+    display:flex;
+    gap:15px;
+}
+
+.btn-acao{
+    flex:1;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+    text-align:center;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+
+
+.btn-aceitar{
+    background:linear-gradient(135deg,#16a34a,#22c55e);
+    color:#fff;
+}
+
+
+
+.btn-recusar{
+    background:linear-gradient(135deg,#ef4444,#f87171);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.btn-concluir{
+    background: linear-gradient(135deg,#2563eb,#3b82f6);
+    color:#fff;
+}
+
+.btn-acao:hover{
+    transform:scale(1.02);
+}
+
+
+
+.vazio{
+    background:#fff;
+
+    padding:70px 30px;
+
+    border-radius:24px;
+
+    text-align:center;
+
+    border:1px solid rgba(255,255,255,.06);
+
+    box-shadow:0 10px 30px rgba(0,0,0,.22);
+}
+
+.vazio i{
+    font-size:60px;
+
+    color:#11172a;
+
+    margin-bottom:20px;
+}
+
+.vazio h2{
+    font-size:30px;
+    margin-bottom:10px;
+    color:#11172a;
+}
+
+.vazio p{
+    color:#475569;
+}

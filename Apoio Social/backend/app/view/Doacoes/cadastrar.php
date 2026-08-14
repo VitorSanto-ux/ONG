@@ -1,25 +1,117 @@
+<?php
+
+session_start();
+
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/db/database.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/DoacaoController.php";
+
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../login.php");
+    exit;
+}
+
+$DoacaoController = new DoacaoController($pdo);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $usuarioId = $_SESSION['usuario']['id'];
+
+    $nomeDoacao = trim($_POST['nome_doacao']);
+    $descricao = trim($_POST['descricao']);
+    $preco = $_POST['preco_aarrecadar'];
+    $Idcampaha = $_POST['campanha_id'];
+    $prazoArrecadar = $_POST['prazo_aarrecadar'];
+    $localizacao = trim($_POST['localizacao']);
+
+    $resultado = $DoacaoController->criar(
+        $usuarioId,
+        $Idcampaha,
+        $nomeDoacao,
+        $descricao,
+        $preco,
+        $prazoArrecadar,
+        $localizacao
+    );
+
+    if ($resultado) {
+        header("Location: ../../../index.php");
+        exit;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Doações</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastrar Doação</title>
+
 </head>
 
 <body>
-    <form method="post">
-        <label for="nome_doacao">Nome da Doação: </label>
-        <input type="text" name="nome_doacao" required><br>
 
-        <label for="descricao">Descrição da Doação: </label>
-        <input type="text" name="descricao" required><br>
+    <form method="POST">
 
-        <label for="preco_aarrecadar_id">Preço da Doação: </label>
-        <input type="number" name="preco_aarrecadar" step="0.01" required><br>
+        <label for="nome_doacao">
+            Nome da Doação:
+        </label>
 
-        <label for="campanhas_id">Campanhas da Doação: </label>
-        <select name="campanhas_id" required>
+        <input
+            type="text"
+            name="nome_doacao"
+            id="nome_doacao"
+            required>
+
+        <br>
+
+
+        <label for="descricao">
+            Descrição da Doação:
+        </label>
+
+        <textarea
+            name="descricao"
+            id="descricao"
+            required></textarea>
+
+        <br>
+
+
+        <label for="preco_aarrecadar">
+            Preço da Doação:
+        </label>
+
+        <input
+            type="number"
+            name="preco_aarrecadar"
+            id="preco_aarrecadar"
+            step="0.01"
+            min="0"
+            required>
+
+        <br>
+
+
+        <label for="campanha_id">
+            Campanha da Doação:
+        </label>
+
+        <select
+            name="campanha_id"
+            id="campanha_id"
+            required>
+
+            <option value="">
+                Selecione uma campanha
+            </option>
+
             <option value="1">
                 Campanha do Agasalho
             </option>
@@ -99,36 +191,45 @@
             <option value="20">
                 Juntos Contra a Fome
             </option>
+
         </select>
 
-        <label for="prazo">Prazo da Doação: </label>
-        <input type="number" name="prazo" required><br>
+        <br>
 
-        <label for="localização">Localização da Doação: </label>
-        <input type="text" name="localizacao" required><br>
 
-        <input type="submit" value="Cadastrar">
+        <label for="prazo_aarrecadar">
+            Prazo da Doação:
+        </label>
+
+        <input
+            type="number"
+            name="prazo_aarrecadar"
+            id="prazo_aarrecadar"
+            min="1"
+            required>
+
+        <br>
+
+
+        <label for="localizacao">
+            Localização da Doação:
+        </label>
+
+        <input
+            type="text"
+            name="localizacao"
+            id="localizacao"
+            required>
+
+        <br>
+
+
+        <input
+            type="submit"
+            value="Cadastrar">
+
     </form>
+
 </body>
 
 </html>
-
-<?php  
-
-require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/db/database.php";
-require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/DoacaoController.php";
-
-$DoacaoController = new DoacaoController($pdo);
-
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $nome_doacao = $_POST['nome_doacao'];
-    $descricao = $_POST['descricao'];
-    $preco_aarrecadar = $_POST['preco_aarrecadar'];
-    $campanha_id = $_POST['campanha_id'];
-    $prazo = $_POST['prazo'];
-    $localizacao = $_POST['localizacao'];
-
-    $DoacaoController->cadastrar($nome_doacao, $descricao, $preco_aarrecadar, $campanha_id, $prazo, $localizacao);
-    header('Location: ../../../index.php');
-}
-?>

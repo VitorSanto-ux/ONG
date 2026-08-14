@@ -5,16 +5,17 @@ session_start();
 require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/db/database.php";
 require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/UsuarioController.php";
 require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/DoacaoController.php";
-require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/services/PerfilService.php";
-require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/Controller.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/services/PerfilServices.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/controllers/ParticipacaoController.php";
+require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/frontend/public/auth.php";
 
 
 $participacaoController = new ParticipacaoController($pdo);
 
-if( !isset($_SESSION['usuario']) ){
+if (!isset($_SESSION['usuario'])) {
 
-header("Location: login.php");
-exit;
+    header("Location: login.php");
+    exit;
 }
 
 $usuarioId = $_SESSION['usuario']['id'];
@@ -25,7 +26,7 @@ $perfilService = new PerfilService($usuarioController);
 
 $usuario = $usuarioController->buscarUsuario($usuarioId);
 
-$doacao = $usuarioController->listarDoacaoDoPerfil(
+$doacao = $usuarioController->listarDoacoesDoPerfil(
     $usuarioId,
     $usuario['tipo'],
     $doacaoController,
@@ -68,11 +69,14 @@ if (isset($_POST['alterar_foto'])) {
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/perfil.css">
     <title>Perfil</title>
 </head>
+
 <body>
     <a href="home.php" class="btn-back">
 
@@ -93,13 +97,13 @@ if (isset($_POST['alterar_foto'])) {
     </a>
 
     <div class="container">
-        
+
         <div class="banner"></div>
 
         <div class="profile-bar">
             <div class="profile-left">
                 <div class="avatar-wrap">
-                    <img 
+                    <img
                         class="avatar"
                         src="<?= !empty($usuario['foto']) ? $usuario['foto'] : '' ?>"
                         alt="Foto de perfil">
@@ -193,7 +197,7 @@ if (isset($_POST['alterar_foto'])) {
 
                     </a>
 
-                    <?php else: ?>
+                <?php else: ?>
 
                     <a
                         href="../public/Voluntário/participar-doacao.php"
@@ -205,118 +209,121 @@ if (isset($_POST['alterar_foto'])) {
                 <?php endif; ?>
 
                 <a href="logout.php" class="btn-logout">
-                <1 class="fa-solid fa-right-from-bracket"></i>
-                    Sair    
-                </div>
+                    <i class="fa-solid fa-right-from-bracket">
+                        Sair
+                    </i>
+                </a>
             </div>
+        </div>
 
-            <div class="grid">
+        <div class="grid">
 
-                <div class="card card-perfil">
+            <div class="card card-perfil">
 
-                    <div class="card-esquerdo">
-                        <div class="card-title">
-                            <h2>Informação da Conta</h2>
+                <div class="card-esquerdo">
+                    <div class="card-title">
+                        <h2>Informação da Conta</h2>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-icon">
+                            <i class="fa-solid fa-envelope"></i>
                         </div>
 
-                        <div class="info-row">
-                            <div class="info-icon">
-                                <i class="fa-solid fa-envelope"></i>
-                            </div>
+                        <div class="info-label">
+                            Email
+                        </div>
 
+                        <div class="info-val">
+                            <?= htmlspecialchars($usuario['email']) ?>
+                        </div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-icon">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+
+                        <div>
                             <div class="info-label">
-                                Email
+                                Telefone
                             </div>
 
-                             <div class="info-val">
-                                <?= htmlspecialchars($usuario['email']) ?>
-                            </div>
-                        </div>
-
-                        <div class="info-row">
-                            <div class="info-icon">
-                                <i class="fa-solid fa-phone"></i>
-                            </div>
-
-                            <div>
-                                <div class="info-label">
-                                    Telefone
-                                </div>
-
-                                <div class="info-val">
-                                    <?= htmlspecialchars($usuario['telefone']) ?>
-                                </div>
+                            <div class="info-val">
+                                <?= htmlspecialchars($usuario['telefone']) ?>
                             </div>
                         </div>
-
-                        <div class="info-row">
-                            <div class="info-icon">
-                                <i class="fa-solid fa-user-tag"></i>
-                            </div>
-
-                            <div>
-                                <div class="info-label">
-                                    Tipo de conta
-                                </div>
-
-                                <div class="info-val">
-                                    <?= htmlspecialchars($usuario['tipo']) ?>
-                                </div>
-                            </div>
-                        </div>
-                
                     </div>
 
-                    <div class="card-direito">
-
-                        <div class="card-titlr">
-                            <h2>Alterar Senha</h2>
+                    <div class="info-row">
+                        <div class="info-icon">
+                            <i class="fa-solid fa-user-tag"></i>
                         </div>
 
-                        <?php if (!empty($mensagem)): ?>
-                            <div class="msg-alert">
-                                <?= $mensagem ?>
-                            </div>
-                        <?php endif; ?>
-
-                        <form
-                            method="POST"
-                            class="form-senha">
-
-                            <div class="input-group">
-                                <label>Email</label>
-
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="Digite seu email"
-                                    required>
+                        <div>
+                            <div class="info-label">
+                                Tipo de conta
                             </div>
 
-                            <div class="input-group">
-                                <label>Nova Senha</label>
-
-                                <input
-                                    type="password"
-                                    name="nova_senha"
-                                    placeholder="Digite a nova senha"
-                                    required>
+                            <div class="info-val">
+                                <?= htmlspecialchars($usuario['tipo']) ?>
                             </div>
-
-                            <div class="input-group">
-                                <label>Confirmar Senha</label>
-
-                                <input
-                                    type="password"
-                                    name="confirmar_senha"
-                                    placeholder="Confirme sua nova senha"
-                                    required>
-                            </div>
-                        </form>
+                        </div>
                     </div>
+
+                </div>
+
+                <div class="card-direito">
+
+                    <div class="card-titlr">
+                        <h2>Alterar Senha</h2>
+                    </div>
+
+                    <?php if (!empty($mensagem)): ?>
+                        <div class="msg-alert">
+                            <?= $mensagem ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <form
+                        method="POST"
+                        class="form-senha">
+
+                        <div class="input-group">
+                            <label>Email</label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Digite seu email"
+                                required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Nova Senha</label>
+
+                            <input
+                                type="password"
+                                name="nova_senha"
+                                placeholder="Digite a nova senha"
+                                required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Confirmar Senha</label>
+
+                            <input
+                                type="password"
+                                name="confirmar_senha"
+                                placeholder="Confirme sua nova senha"
+                                required>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 </body>
+
 </html>

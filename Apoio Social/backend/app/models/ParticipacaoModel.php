@@ -1,16 +1,18 @@
 <?php
 
-class ParticipacaoModel {
+class ParticipacaoModel
+{
 
     private $pdo;
 
-    public function __construct(PDO $pdo) {
+    public function __construct(PDO $pdo)
+    {
         $this->pdo = $pdo;
     }
 
     public function participar($doadorId, $doacaoId, $mensagem)
-{
-    $sql = "INSERT INTO participacoes
+    {
+        $sql = "INSERT INTO participacoes
     (
         doador_id,
         doacao_id,
@@ -19,19 +21,19 @@ class ParticipacaoModel {
     )
     VALUES (?, ?, ?, 'pendente')";
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-    return $stmt->execute([
-        $doadorId,
-        $doacaoId,
-        $mensagem
-    ]);
-}
+        return $stmt->execute([
+            $doadorId,
+            $doacaoId,
+            $mensagem
+        ]);
+    }
 
 
-public function listarParaAdministrador($administradorId)
-{
-    $sql = "SELECT
+    public function listarParaAdministrador($administradorId)
+    {
+        $sql = "SELECT
             c.*,
             u.nome AS doador,
             d.nome_doacao
@@ -49,68 +51,69 @@ public function listarParaAdministrador($administradorId)
 
         ORDER BY p.id DESC";
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-    $stmt->execute([$administradorId]);
+        $stmt->execute([$administradorId]);
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-public function atualizarStatus($id, $status)
-{
-    $sql = "UPDATE participacoes
+    public function atualizarStatus($id, $status)
+    {
+        $sql = "UPDATE participacoes
             SET status = ?
             WHERE id = ?";
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-    return $stmt->execute([
-        $status,
-        $id
-    ]);
-}
+        return $stmt->execute([
+            $status,
+            $id
+        ]);
+    }
 
-public function atualizarMensagem($id, $mensagem)
-{
-    $sql = "
+    public function atualizarMensagem($id, $mensagem)
+    {
+        $sql = "
         UPDATE participacoes
         SET mensagem = ?
         WHERE id = ?
     ";
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-    return $stmt->execute([
-        $mensagem,
-        $id
-    ]);
-}
+        return $stmt->execute([
+            $mensagem,
+            $id
+        ]);
+    }
 
-   public function listarPorDoador($doadorId) {
-
-    $sql = "SELECT
+    public function listarPorDoador($doadorId)
+    {
+        $sql = "SELECT
                 p.*,
                 p.mensagem AS solicitacao,
-                d.nome_doacao,
+                d.id AS doacao_id,
                 d.preco,
-                u.nome AS administrador
+                d.id_doador,
+                d.id_campanha,
+                d.descricao,
+                d.prazo_aarrecadar,
+                d.localizacao
             FROM participacoes p
-            INNER JOIN doacoes d
+            INNER JOIN doacao d
                 ON d.id = p.doacao_id
-            INNER JOIN usuarios u
-                ON u.id = d.usuario_id
             WHERE p.doador_id = ?
             ORDER BY p.id DESC";
 
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([$doadorId]);
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$doadorId]);
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-public function contarPendentesAdministrador($administradorId)
-{
-    $sql = "SELECT COUNT(*) as total
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function contarPendentesAdministrador($administradorId)
+    {
+        $sql = "SELECT COUNT(*) as total
             FROM participacoes p
 
             INNER JOIN doacao d
@@ -119,16 +122,17 @@ public function contarPendentesAdministrador($administradorId)
             WHERE d.id_doador = ?
             AND p.status = 'pendente'";
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-    $stmt->execute([$administradorId]);
+        $stmt->execute([$administradorId]);
 
-    return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-}
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
 
-public function contarPendentesDoador($doadorId){
+    public function contarPendentesDoador($doadorId)
+    {
 
-    $sql = "SELECT COUNT(*) as total
+        $sql = "SELECT COUNT(*) as total
             FROM participacoes p
             
             INNER JOIN doacao d
@@ -137,17 +141,16 @@ public function contarPendentesDoador($doadorId){
             WHERE d.id_doador = ?
             AND p.status = 'pendente'";
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-    $stmt->execute([$doadorId]);
+        $stmt->execute([$doadorId]);
 
-    return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
-                
-}
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
 
-public function contarNotificacoesDoador($doadorId)
-{
-    $sql = "
+    public function contarNotificacoesDoador($doadorId)
+    {
+        $sql = "
         SELECT COUNT(*) as total
         FROM participacoes
         WHERE cliente_id = ?
@@ -158,22 +161,21 @@ public function contarNotificacoesDoador($doadorId)
         )
     ";
 
-    $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare($sql);
 
-    $stmt->execute([$doadorId]);
+        $stmt->execute([$doadorId]);
 
-    $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    return $resultado['total'];
+        return $resultado['total'];
+    }
+
+    public function deletar($id)
+    {
+        $sql = "DELETE FROM participacoes WHERE id = ?";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([$id]);
+    }
 }
-
-public function deletar($id)
-{
-    $sql = "DELETE FROM participacoes WHERE id = ?";
-
-    $stmt = $this->pdo->prepare($sql);
-
-    return $stmt->execute([$id]);
-}
-}
-?>

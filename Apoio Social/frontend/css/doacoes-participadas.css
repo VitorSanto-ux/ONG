@@ -1,0 +1,325 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: #11172a;
+    color: #fff;
+    min-height: 100vh;
+}
+
+/* BOTÃO VOLTAR */
+
+.btn-back {
+    position: fixed;
+    top: 25px;
+    left: 25px;
+
+    background: #fff;
+    color: #11172a;
+
+    padding: 12px 18px;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+.btn-back:hover {
+    transform: translateY(-2px);
+    background: #e2e8f0;
+}
+
+/* CONTAINER */
+
+.container {
+    max-width: 1200px;
+    margin: 90px auto 40px;
+    padding: 20px;
+}
+
+/* TOPO */
+
+.top-page {
+    margin-bottom: 35px;
+}
+
+.top-page h1 {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.top-page p {
+    color: #94a3b8;
+    font-size: 15px;
+}
+
+/* GRID */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 25px;
+}
+
+/* CARD */
+
+.card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* TOPO CARD */
+
+.top-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+
+    margin-bottom: 25px;
+}
+
+.content-top{
+    width:100%;
+}
+
+.header-servico{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+
+    gap:14px;
+}
+.foto {
+    width: 70px;
+    height: 70px;
+
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 3px solid #11172a;
+}
+
+.prestador {
+    display: block;
+
+    color: #64748b;
+    font-size: 14px;
+
+    margin-bottom: 4px;
+}
+
+.top-card h2 {
+    color: #11172a;
+    font-size: 22px;
+}
+
+/* INFO */
+
+.info-area {
+    display: flex;
+    gap: 15px;
+
+    margin-bottom: 25px;
+}
+
+.info-box {
+    flex: 1;
+
+    background: #f8fafc;
+
+    padding: 16px;
+
+    border-radius: 14px;
+
+    border: 1px solid #e2e8f0;
+}
+
+.info-box span {
+    display: block;
+
+    color: #64748b;
+    font-size: 13px;
+
+    margin-bottom: 8px;
+}
+
+.info-box strong {
+    color: #11172a;
+    font-size: 18px;
+}
+
+
+
+.mensagem {
+    margin-bottom: 20px;
+}
+
+.mensagem h3 {
+    color: #11172a;
+    margin-bottom: 10px;
+    font-size: 17px;
+}
+
+.mensagem p {
+    color: #475569;
+    line-height: 1.7;
+
+    background: #f8fafc;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    border: 1px solid #e2e8f0;
+
+    word-break: break-word;
+    overflow-wrap: break-word;
+
+    max-width: 100%;
+}
+
+
+
+.localizacao {
+    color: #334155;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.status{
+    display:inline-block;
+
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    font-size:10px;
+    font-weight:600;
+
+    text-transform:uppercase;
+
+    letter-spacing:.4px;
+
+    width:fit-content;
+}
+
+
+.status.pendente {
+    background: #facc15;
+    color: #111827;
+}
+
+
+.status.aceito {
+    background: #22c55e;
+    color: #fff;
+}
+
+
+.status.em_andamento {
+    background: #3b82f6;
+    color: #fff;
+}
+
+
+.status.concluido {
+    background: #10b981;
+    color: #fff;
+}
+
+
+.status.recusado {
+    background: #ef4444;
+    color: #fff;
+}
+
+.btn-delete{
+    min-width:38px;
+    width:38px;
+    height:38px;
+
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#fff;
+
+    border:1px solid #19223f;
+
+    color: #19223f;
+
+    text-decoration:none;
+
+    transition:.25s ease;
+}
+
+.btn-delete:hover{
+    transform:translateY(-2px);
+
+    background:#19223f;
+    color:#fff;
+
+    border-color:#19223f;
+
+    box-shadow:
+        0 10px 20px rgba(239,68,68,.15);
+}
+
+
+
+.empty {
+    background: #fff;
+
+    padding: 50px 30px;
+
+    border-radius: 20px;
+
+    text-align: center;
+}
+
+.empty h2 {
+    color: #11172a;
+    font-size: 24px;
+}
+
+
+
+@media (max-width: 768px) {
+
+    .top-page h1 {
+        font-size: 30px;
+    }
+
+    .info-area {
+        flex-direction: column;
+    }
+
+    .top-card {
+        align-items: flex-start;
+    }
+
+    .top-card h2 {
+        font-size: 20px;
+    }
+}

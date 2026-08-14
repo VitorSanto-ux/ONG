@@ -2,14 +2,17 @@
 
 require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/models/ParticipacaoModel.php";
 
-class ParticipacaoController{
+class ParticipacaoController {
+
     private $participacaoModel;
 
-    public function __construct($pdo){
+    public function __construct($pdo) {
+
         $this->participacaoModel = new ParticipacaoModel($pdo);
     }
 
-    public function participar($doadorId, $doacaoId, $mensagem){
+    public function participar($doadorId, $doacaoId, $mensagem) {
+
         return $this->participacaoModel->participar(
             $doadorId,
             $doacaoId,
@@ -17,32 +20,45 @@ class ParticipacaoController{
         );
     }
 
-    public function listarParaAdministrador($administradorId){
-        return $this->participacaoModel->listarParaAdministrador($administradorId);
+    public function listarParaAdministrador($administradorId)
+    {
+        return $this->participacaoModel
+            ->listarParaAdministrador($administradorId);
     }
 
-    public function atualizarStatus($id, $status){
-        return $this->participacaoModel->atualizarStatus($id, $status);
+    public function atualizarStatus($id, $status)
+    {
+        return $this->participacaoModel
+            ->atualizarStatus($id, $status);
     }
 
-    public function atualizarMensagem($id, $mensagem){
-        return $this->participacaoModel->atualizarMensagem($id, $mensagem);
+    public function atualizarMensagem($id, $mensagem)
+    {
+        return $this->participacaoModel
+            ->atualizarMensagem($id, $mensagem);
     }
 
-    public function listarPorDoador($doadorId){
-        return $this->participacaoModel->listarPorDoador($doadorId);
+    public function listarPorDoador($doadorId) {
+
+        return $this->participacaoModel
+            ->listarPorDoador($doadorId);
     }
 
-    public function contarPendentesAdministrador($administradorId){
-        return $this->participacaoModel->contarPendentesAdministrador($administradorId);
+    public function contarPendentesAdministrador($administradorId)
+    {
+        return $this->participacaoModel
+            ->contarPendentesAdministrador($administradorId);
     }
 
-    public function contarPendentesDoador($doadorId){
-        return $this->participacaoModel->contarPendentesDoador($doadorId);
+    public function contarPendentesDoador($doadorId)
+    {
+        return $this->participacaoModel
+            ->contarPendentesDoador($doadorId);
     }
 
-    public function deletar($id){
-        return $this->participacaoModel->deletar($id);
+    public function deletar($id)
+    {
+        return $this->participacaoModel
+            ->deletar($id);
     }
 }
-?>

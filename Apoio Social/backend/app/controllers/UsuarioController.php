@@ -1,81 +1,84 @@
 <?php
 require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/models/UsuarioModel.php";
-class UsuarioController {
+class UsuarioController
+{
     private $usuarioModel;
-   
-    public function __construct($pdo) {
-        $this->usuarioModel = new UsuarioModel($pdo);
 
+    public function __construct($pdo)
+    {
+        $this->usuarioModel = new UsuarioModel($pdo);
     }
-    public function listar() {
+    public function listar()
+    {
         $usuarios = $this->usuarioModel->buscarTodos();
         include_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/view/Usuario/listar.php";
         return;
     }
 
     public function listarDoacoesDoPerfil($usuarioId, $tipo, $doacaoController, $participacaoController)
-{
-    if ($tipo === 'administrador') {
-        return $doacaoController->listarPorAdministrador($usuarioId);
+    {
+        if ($tipo === 'administrador') {
+            $UsuarioDoacao = $this->usuarioModel->listarPorAdministrador($usuarioId);
+            return ($UsuarioDoacao);
+        }
+
+
+        return $participacaoController->listarPorDoador($usuarioId);
     }
 
-    
-    return $participacaoController->listarPorDoador($usuarioId);
-}
-
-    public function buscarUsuario($id){
+    public function buscarUsuario($id)
+    {
         $usuario = $this->usuarioModel->buscarUsuario($id);
         return $usuario;
     }
 
-    public function cadastrar($nome, $email, $senha, $telefone, $tipo){
+    public function cadastrar($nome, $email, $senha, $telefone, $tipo)
+    {
         $this->usuarioModel->cadastrar($nome, $email, $senha, $telefone, $tipo);
     }
-    
-    public function editar($nome,$email, $senha, $telefone, $id){
-        $this->usuarioModel->editar($nome, $email, $senha, $telefone, $id);
 
+    public function editar($nome, $email, $senha, $telefone, $id)
+    {
+        $this->usuarioModel->editar($nome, $email, $senha, $telefone, $id);
     }
 
-    public function deletar($id){
+    public function deletar($id)
+    {
         $usuario = $this->usuarioModel->deletar($id);
         return $usuario;
     }
 
-    public function login($email, $senha){
+    public function login($email, $senha)
+    {
 
-    $usuario = $this->usuarioModel->buscarPorEmail($email);
+        $usuario = $this->usuarioModel->buscarPorEmail($email);
 
-    if($usuario){
+        if ($usuario) {
 
-        if($senha == $usuario['senha']){
+            if ($senha == $usuario['senha']) {
 
-            return $usuario;
-
+                return $usuario;
+            }
         }
 
+        return false;
     }
 
-    return false;
+    public function alterarFoto($foto, $id)
+    {
 
+        return $this->usuarioModel->alterarFoto(
+            $foto,
+            $id
+        );
+    }
+
+    public function alterarSenha($senha, $id)
+    {
+
+        return $this->usuarioModel->alterarSenha(
+            $senha,
+            $id
+        );
+    }
 }
-
-public function alterarFoto($foto, $id){
-
-    return $this->usuarioModel->alterarFoto(
-        $foto,
-        $id
-    );
-}
-
-public function alterarSenha($senha, $id){
-
-    return $this->usuarioModel->alterarSenha(
-        $senha,
-        $id
-    );
-}
-
-}
-
-?>

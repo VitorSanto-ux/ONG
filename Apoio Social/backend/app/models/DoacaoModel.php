@@ -100,14 +100,14 @@ class DoacaoModel
     {
 
         $sql = "SELECT
-    doacoes.*,
+    doacao.*,
     usuarios.nome AS administrador,
     usuarios.foto,
     usuarios.email
-    FROM doacoes
+    FROM doacao
     INNER JOIN usuarios
-    ON doacoes.usuario_id = usuarios.id
-    WHERE doacoes.id = ?";
+    ON doacao.id_doador = usuarios.id
+    WHERE doacao.id = ?";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -140,7 +140,7 @@ class DoacaoModel
 
         $stmt = $this->pdo->prepare($sql);
 
-         $stmt->execute([
+        $stmt->execute([
             $usuarioId,
             $campanhaId,
             $descricao,
@@ -151,7 +151,7 @@ class DoacaoModel
 
         $sql2 = "INSERT INTO campanha 
     (
-        id_campanha,
+        
         nome,
         descricao,
         data_inicio,
@@ -159,18 +159,16 @@ class DoacaoModel
         meta_valor
         
         )
-    VALUES (?, ?, ?, NOW(),NOW(), ?)";
+    VALUES ( ?, ?, NOW(),NOW(), ?)";
 
-        $stmt = $this->pdo->prepare($sql2);
+        $stmt2 = $this->pdo->prepare($sql2);
 
-        return $stmt->execute([
-            $campanhaId,
+        return $stmt2->execute([
+
             $nomeDoacao,
             $descricao,
             $preco
         ]);
-
-        
     }
 
 
@@ -202,14 +200,10 @@ class DoacaoModel
     public function deletar($id)
     {
 
-        $sql = "DELETE FROM doacoes WHERE id = ?";
+        $sql = "DELETE FROM doacao WHERE id = ?";
 
         $stmt = $this->pdo->prepare($sql);
 
         return $stmt->execute([$id]);
     }
-    
-    
 }
-
-?>

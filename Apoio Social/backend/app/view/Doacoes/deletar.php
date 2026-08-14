@@ -5,11 +5,18 @@ require_once "C:/Turma2/xampp/htdocs/ONG/Apoio Social/backend/app/db/database.ph
 
 $doacaoController = new DoacaoController($pdo);
 
-if(isset($_GET['id'])){
+if (isset($_GET['id'])) {
+
     $id = $_GET['id'];
+
     $doacaoController->deletar($id);
+
     header('Location: ../../index.php');
+    exit;
+
 } else {
+
     header('Location: ../../../index.php');
+    exit;
 }
 ?>

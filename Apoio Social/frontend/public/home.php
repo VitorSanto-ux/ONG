@@ -41,6 +41,7 @@ if (!empty($_SESSION['usuario'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/home.css">
     <title>Catálogo de Campanhas</title>
 </head>
 
@@ -179,9 +180,13 @@ if (!empty($_SESSION['usuario'])) {
     <section class="doacoes campanhas-menu" id="doacoes">
 
         <div class="doacoes-grid">
+
             <?php foreach ($doacoes as $doacao): ?>
 
-                <div class="card-doacao" data-nome="<?= strtolower($doacao['nome_doacao']) ?>" data-administrador="<?= strtolower($doacao['administrador']) ?>" data-descricao="<?= strtolower($doacao['descricao']) ?>">
+                <div class="card-doacao"
+                    data-nome="<?= htmlspecialchars(strtolower($doacao['descricao'])) ?>"
+                    data-administrador="<?= htmlspecialchars(strtolower($doacao['administrador'])) ?>"
+                    data-descricao="<?= htmlspecialchars(strtolower($doacao['descricao'])) ?>">
 
                     <div class="top-card">
 
@@ -198,7 +203,7 @@ if (!empty($_SESSION['usuario'])) {
                                 </span>
 
                                 <h3>
-                                    <?= $doacao['nome_doacao'] ?>
+                                    <?= $doacao['descricao'] ?>
                                 </h3>
                             </div>
                         </div>
@@ -220,22 +225,22 @@ if (!empty($_SESSION['usuario'])) {
                             <div class="info-box">
 
                                 <span class="label">
-                                    Prazo
+                                    Prazo à arrecadar
                                 </span>
 
                                 <strong>
-                                    <?= $doacao['prazo'] ?> dias
+                                    <?= $doacao['prazo_aarrecadar'] ?> dias
                                 </strong>
 
                             </div>
 
                             <div class="info-box">
                                 <span class="label">
-                                    Preço à arrecadar
+                                    Preço
                                 </span>
 
                                 <strong>
-                                    R$ <?= number_format($doacao['preco_aarrecadar'], 2, ',', '.') ?>
+                                    R$ <?= number_format($doacao['preco'], 2, ',', '.') ?>
                                 </strong>
                             </div>
                         </div>
@@ -248,11 +253,11 @@ if (!empty($_SESSION['usuario'])) {
                             <button
                                 class="btn-ver-doacao"
                                 onclick="abrirModalDoacao(
-                                        '<?= $doacao['nome_doacao'] ?>',
-                                        '<?= $doacao['administrador'] ?>'
+                                '<?= $doacao['descricao'] ?>',
+                                        '<?= $doacao['administrador'] ?>',
                                         '<?= $doacao['descricao'] ?>',
-                                        '<?= $doacao['prazo'] ?>',
-                                        '<?= $doacao['preco_aarrecadar'] ?>',
+                                        '<?= $doacao['prazo_aarrecadar'] ?>',
+                                        '<?= $doacao['preco'] ?>',
                                         '<?= $doacao['localizacao'] ?>',
                                         '<?= !empty($doacao['foto']) ? $doacao['foto'] : '' ?>'
                                         )">
@@ -265,18 +270,19 @@ if (!empty($_SESSION['usuario'])) {
                                 <button
                                     class="btn-ver-doacao"
                                     onclick="abrirModalDoacao(
-                                        '<?= $doacao['nome_doacao'] ?>',
-                                        '<?= $doacao['administrador'] ?>'
+                                    
+                                    '<?= $doacao['descricao'] ?>',
+                                    '<?= $doacao['administrador'] ?>',
                                         '<?= $doacao['descricao'] ?>',
-                                        '<?= $doacao['prazo'] ?>',
-                                        '<?= $doacao['preco_aarrecadar'] ?>',
+                                        '<?= $doacao['prazo_aarrecadar'] ?>',
+                                        '<?= $doacao['preco'] ?>',
                                         '<?= $doacao['localizacao'] ?>',
                                         '<?= !empty($doacao['foto']) ? $doacao['foto'] : '' ?>'
                                         )">
                                     Ver doação
                                 </button>
 
-                                <a href="doacao.php?id=<?= $doacao['id'] ?>"
+                                <a href="../public/Voluntário/participar-doacao.php?id=<?= $doacao['id'] ?>"
                                     class="btn-participar">
                                     Doar
                                 </a>
@@ -319,7 +325,7 @@ if (!empty($_SESSION['usuario'])) {
 
                 <img
                     scr=""
-                    id="modalFotoDoacao"
+                    id="modal-foto"
                     class="modal-foto">
 
                 <div>
@@ -338,20 +344,20 @@ if (!empty($_SESSION['usuario'])) {
                     <div class="detalhe-box">
 
                         <span>
-                            Prazo
+                            Prazo à arrecadar
                         </span>
 
-                        <strong id="modal-prazo"></strong>
+                        <strong id="modal-prazo_aarrecadar"></strong>
 
                     </div>
 
                     <div class="detalhe-box">
 
                         <span>
-                            Preço à arrecadar
+                            Preço
                         </span>
 
-                        <strong id="modal-preco_aarrecadar"></strong>
+                        <strong id="modal-preco"></strong>
 
                     </div>
 
@@ -365,7 +371,7 @@ if (!empty($_SESSION['usuario'])) {
 
 
 
+    <script src="../public/js/home.js"></script>
 </body>
 
 </html>
-<script src="js/home.js"></script>
