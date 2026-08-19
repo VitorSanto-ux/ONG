@@ -23,6 +23,7 @@
         <div class="auth">
             <a href="login.php">Entrar</a>
             <a href="cadastro.php">Cadastrar</a>
+            <a href="dashbord.php">Tabela</a>
         </div>
     </header>
 
@@ -53,7 +54,7 @@
 
                 <div class="image-glow"></div>
 
-                    <img src="">
+                    <img src="../img/ChatGPT Image 19 de ago. de 2026, 09_59_43.png">
 
                     <div class="floating-card card-1">
                         <h4><i class="fa-solid fa-rocket">Projetos ativos</i></h4>

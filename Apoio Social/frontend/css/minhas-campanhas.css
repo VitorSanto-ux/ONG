@@ -185,6 +185,10 @@ body{
     color:#334155;
 }
 
+.localizacao{
+    color:#334155;
+}
+
 
 
 .preco{
@@ -438,4 +442,9 @@ body{
         opacity:1;
         transform:translateY(0);
     }
+}
+
+.auth{
+    display:flex;
+    gap:12px;
 }

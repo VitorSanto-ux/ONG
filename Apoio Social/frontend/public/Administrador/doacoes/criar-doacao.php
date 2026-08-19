@@ -70,8 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $usuarioId,
 
-        $campanhaId,
-
         $nomeDoacao,
 
         $descricao,

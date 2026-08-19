@@ -103,6 +103,7 @@ if (!empty($_SESSION['usuario'])) {
             <?php else: ?>
                 <a href="login.php">Entrar</a>
                 <a href="cadastrar.php">Cadastrar</a>
+                <a href="index.php">Início</a>
             <?php endif; ?>
         </nav>
     </header>

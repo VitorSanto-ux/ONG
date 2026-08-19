@@ -20,6 +20,18 @@ $q = $_GET['q'] ?? '';
 $campanhaId = $_GET['campanha_id'] ?? null;
 
 $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
+
+// Valores dos indicadores
+$totalUsuarios = 10;
+$totalDoacoes = 20;
+$totalCampanhas = 5;
+
+// Soma dos indicadores
+$totalParticipacoes =
+    $totalUsuarios +
+    $totalDoacoes +
+    $totalCampanhas;
+
 /*
 |--------------------------------------------------------------------------
 | SUA CONEXÃO E CONTROLLERS JÁ EXISTENTES
@@ -64,7 +76,6 @@ $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
     <title>Apoio Social</title>
 
     <style>
-
         /* ==================================================
            DASHBOARD - RF04
         ================================================== */
@@ -138,6 +149,10 @@ $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
             border-radius: 8px;
         }
 
+        .auth {
+            display: flex;
+            gap: 12px;
+        }
     </style>
 
 </head>
@@ -146,6 +161,9 @@ $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
 <body>
 
 
+    <div class="auth">
+        <a href="index.php">Início</a>
+    </div>
     <!-- ==================================================
          RF04 - DASHBOARD
     ================================================== -->
@@ -193,15 +211,6 @@ $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
                     </td>
                 </tr>
 
-
-                <tr>
-                    <td>Total de Participações</td>
-
-                    <td>
-                        <?= $totalParticipacoes ?? 0 ?>
-                    </td>
-                </tr>
-
             </tbody>
 
         </table>
@@ -221,8 +230,7 @@ $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
         <input
             type="text"
             id="pesquisa"
-            placeholder="Digite uma palavra-chave..."
-        >
+            placeholder="Digite uma palavra-chave...">
 
     </section>
 
@@ -243,17 +251,16 @@ $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
                     class="card-doacao"
 
                     data-nome="<?= strtolower(
-                        $doacao['campanha'] ?? ''
-                    ) ?>"
+                                    $doacao['campanha'] ?? ''
+                                ) ?>"
 
                     data-administrador="<?= strtolower(
-                        $doacao['administrador'] ?? ''
-                    ) ?>"
+                                            $doacao['administrador'] ?? ''
+                                        ) ?>"
 
                     data-descricao="<?= strtolower(
-                        $doacao['descricao'] ?? ''
-                    ) ?>"
-                >
+                                        $doacao['descricao'] ?? ''
+                                    ) ?>">
 
                     <h3>
                         <?= htmlspecialchars(
@@ -293,7 +300,6 @@ $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
     ================================================== -->
 
     <script>
-
         const pesquisa =
             document.getElementById("pesquisa");
 
@@ -301,13 +307,13 @@ $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
             document.querySelectorAll(".card-doacao");
 
 
-        pesquisa.addEventListener("input", function () {
+        pesquisa.addEventListener("input", function() {
 
             const palavra =
                 this.value.toLowerCase().trim();
 
 
-            cards.forEach(function (card) {
+            cards.forEach(function(card) {
 
                 const nome =
                     card.dataset.nome || "";
@@ -338,7 +344,6 @@ $doacoes = $doacaoController->buscarFiltrados($q, $campanhaId);
             });
 
         });
-
     </script>
 
 

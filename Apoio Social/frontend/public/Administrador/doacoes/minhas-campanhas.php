@@ -44,6 +44,8 @@ $administradorId = $_SESSION['usuario']['id'];
 // ========================================
 
 $doacoes = $doacaoController->listarPorAdministrador($administradorId);
+// var_dump($doacoes);
+// die();
 
 ?>
 
@@ -73,6 +75,10 @@ $doacoes = $doacaoController->listarPorAdministrador($administradorId);
 
 
 <body>
+
+    <div class="auth">
+            <a href="/frontend/public/index.php">Início</a>
+        </div>
 
 
     <!-- ========================================
@@ -223,8 +229,8 @@ $doacoes = $doacaoController->listarPorAdministrador($administradorId);
                             R$
 
                             <?= number_format(
-                                $doacao['preco_aarrecadar']
-                                    ?? $doacao['preco_aarrecadar']
+                                $doacao['preco']
+                                    ?? $doacao['preco']
                                     ?? 0,
                                 2,
                                 ',',

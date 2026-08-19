@@ -43,22 +43,23 @@ class DoacaoController
 
     public function criar(
         $usuarioId,
-        $campanhaId,
         $nomeDoacao,
         $descricao,
         $preco,
         $prazo_aarrecadar,
         $localizacao
     ) {
-        return $this->doacaoModel->criar(
-            $usuarioId,
-            $campanhaId,
+
+    
+        $campanhaid = $this->doacaoModel->criar(
             $nomeDoacao,
             $descricao,
             $preco,
             $prazo_aarrecadar,
             $localizacao
         );
+
+        return $this->doacaoModel->criarDoacao($preco,$usuarioId, $campanhaid, $descricao, $prazo_aarrecadar,$localizacao);
     }
 
 

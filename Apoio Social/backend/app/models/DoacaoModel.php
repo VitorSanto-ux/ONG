@@ -118,56 +118,61 @@ class DoacaoModel
 
 
     public function criar(
-        $usuarioId,
-        $campanhaId,
-        $nomeDoacao,
+        $nome,
         $descricao,
-        $preco,
+        $metaValor,
         $prazo_aarrecadar,
         $localizacao
-    ) {
 
-        $sql = "INSERT INTO doacao 
-    (
-        id_doador,
-        id_campanha,
-        descricao,
-        preco,
-        prazo_aarrecadar,
-        localizacao
-    )
-    VALUES (?, ?, ?, ?, ?, ?)";
+    ) {
+        $sql = "INSERT INTO campanha (
+                nome,
+                descricao,
+                data_inicio,
+                data_fim,
+                meta_valor
+            )
+            VALUES (?, ?, NOW(), NOW(), ?)";
 
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute([
+            $nome,
+            $descricao,
+            $metaValor
+        ]);
+
+        // Retorna o ID da campanha recém-criada
+        return $this->pdo->lastInsertId();
+    }
+
+    public function criarDoacao(
+        $preco,
+        $usuarioId,
+        $campanhaId,
+        $descricao,
+        $prazo_aarrecadar,
+        $localizacao
+    ) {
+        $sql = "INSERT INTO doacao (
+                preco,
+                id_doador,
+                id_campanha,
+                descricao,
+                prazo_aarrecadar,
+                localizacao
+            )
+            VALUES (?, ?, ?, ?, ?, ?)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            $preco,
             $usuarioId,
             $campanhaId,
             $descricao,
-            $preco,
             $prazo_aarrecadar,
             $localizacao
-        ]);
-
-        $sql2 = "INSERT INTO campanha 
-    (
-        
-        nome,
-        descricao,
-        data_inicio,
-        data_fim,
-        meta_valor
-        
-        )
-    VALUES ( ?, ?, NOW(),NOW(), ?)";
-
-        $stmt2 = $this->pdo->prepare($sql2);
-
-        return $stmt2->execute([
-
-            $nomeDoacao,
-            $descricao,
-            $preco
         ]);
     }
 

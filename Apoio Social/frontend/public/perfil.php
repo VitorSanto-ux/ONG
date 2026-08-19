@@ -105,7 +105,7 @@ if (isset($_POST['alterar_foto'])) {
                 <div class="avatar-wrap">
                     <img
                         class="avatar"
-                        src="<?= !empty($usuario['foto']) ? $usuario['foto'] : '' ?>"
+                        src="<?= !empty($usuario['foto']) ? $usuario['foto'] : '../img/user.jpg' ?>"
                         alt="Foto de perfil">
 
                     <form
